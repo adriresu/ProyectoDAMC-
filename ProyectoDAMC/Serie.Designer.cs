@@ -30,13 +30,13 @@
         {
             this.SuspendLayout();
             // 
-            // MainMenu
+            // Serie
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
-            this.ClientSize = new System.Drawing.Size(1865, 828);
-            this.Name = "MainMenu";
+            this.ClientSize = new System.Drawing.Size(2856, 1130);
+            this.Name = "Serie";
             this.Text = "MainMenu";
             this.Load += new System.EventHandler(this.MainMenu_Load);
             this.ResumeLayout(false);

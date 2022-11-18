@@ -38,7 +38,7 @@ namespace ProyectoDAMC
                 String casi;
                 foreach (var item in jsonString)
                 {
-                    casi = "asdf";
+                     casi = "asdf";
                     //casi = (String)("{0} {1} {2} {3}\n", item.ID, item.Sinopsis, item.Genero, item.Titulo);
                 }
                 var d = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(jsonString);
