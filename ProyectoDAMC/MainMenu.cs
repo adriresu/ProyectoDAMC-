@@ -34,7 +34,7 @@ namespace ProyectoDAMC
                 request.AddHeader("header", "application/json");
                 var response = client.Post(request);
                 var content = response.Content; // Raw content as string
-                dynamic jsonString = Newtonsoft.Json.JsonConvert.DeserializeObject(content);
+                dynamic jsonString = JsonConvert.DeserializeObject(content);
                 String casi;
                 foreach (var item in jsonString)
                 {
