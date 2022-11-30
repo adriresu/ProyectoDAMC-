@@ -47,7 +47,7 @@ namespace ProyectoDAMC
             if (flag){            
                 try
                 {
-                    string url = "http://192.168.1.136:80";
+                    string url = "http://192.168.0.14:80";
                     var client = new RestClient(url);
                     var request = new RestRequest();
                     request.AddParameter("Tipo", "Login");
