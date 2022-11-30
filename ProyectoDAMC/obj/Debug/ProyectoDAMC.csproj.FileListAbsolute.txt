@@ -36,3 +36,4 @@ C:\Users\resua\source\repos\ProyectoDAMC\ProyectoDAMC\bin\Debug\System.ValueTupl
 C:\Users\resua\source\repos\ProyectoDAMC\ProyectoDAMC\obj\Debug\ProyectoDAMC.csproj.CopyComplete
 C:\Users\resua\source\repos\ProyectoDAMC\ProyectoDAMC\bin\Debug\Newtonsoft.Json.dll
 C:\Users\resua\source\repos\ProyectoDAMC\ProyectoDAMC\bin\Debug\Newtonsoft.Json.xml
+C:\Users\resua\source\repos\ProyectoDAMC\ProyectoDAMC\obj\Debug\ProyectoDAMC.usersEdit.resources

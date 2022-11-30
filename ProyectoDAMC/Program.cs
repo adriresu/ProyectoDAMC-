@@ -16,7 +16,7 @@ namespace ProyectoDAMC
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Registro());
+            Application.Run(new Login());
         }
     }
 }

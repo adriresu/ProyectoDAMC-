@@ -18,6 +18,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Runtime.InteropServices;
 
+
 namespace ProyectoDAMC
 {
     public partial class Login : Form
@@ -31,7 +32,7 @@ namespace ProyectoDAMC
         {
             Boolean flag = true;
             String json;
-            MainMenu menu = new MainMenu();
+            usersEdit menu = new usersEdit();
             if (textBox1.Text.Length <= 0)
             {
                 textBox1.BackColor = Color.FromArgb(255, 191, 191);
@@ -53,20 +54,29 @@ namespace ProyectoDAMC
                     request.AddParameter("username", textBox1.Text);
                     request.AddParameter("password", textBox2.Text);
                     request.AddHeader("header", "application/json");
+                    request.AddHeader("Accept", "application/json");
+                    request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+
                     var response = client.Post(request);
-                    var content = response.Content; // Raw content as string
-                    JObject jsonString = JObject.Parse(content);
-                    json = (string)jsonString.GetValue("response");
+                    var content = response.Content;
+
+                    if (content != "")
+                    {
+                        var stringToConvert = response.Content.Substring(1, response.Content.Length - 2);
+                        usuario usuarioTemp = JsonConvert.DeserializeObject<usuario>(stringToConvert);
+
+                        if (usuarioTemp.Rol == 1)
+                        {
+                            Registro.user = textBox1.Text;
+                            Registro.password = textBox2.Text;
+                            menu.Show();
+                        }
+                    }
+
                 }
                 catch (Exception)
                 {
                     throw;
-                }
-                if (json == "True")
-                {
-                    Registro.user = textBox1.Text;
-                    Registro.password = textBox2.Text;
-                    menu.Show();
                 }
             }
         }

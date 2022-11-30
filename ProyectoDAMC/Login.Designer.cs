@@ -33,7 +33,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
@@ -78,22 +77,11 @@
             this.textBox2.Size = new System.Drawing.Size(187, 26);
             this.textBox2.TabIndex = 4;
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(808, 475);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(305, 20);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "You dont have an account, then click here";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
-            // 
             // Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1928, 731);
-            this.Controls.Add(this.label3);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label2);
@@ -113,7 +101,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Label label3;
     }
 }
 
