@@ -65,16 +65,19 @@ namespace ProyectoDAMC
 
                     Bitmap bmpReturn = null;
 
+                    if (usuarioTemp.Imagen != null)
+                    {
+                        byte[] byteBuffer = Convert.FromBase64String(usuarioTemp.Imagen);
+                        MemoryStream memoryStream = new MemoryStream(byteBuffer);
+                        memoryStream.Position = 0;
+                        bmpReturn = (Bitmap)Bitmap.FromStream(memoryStream);
+                        memoryStream.Close();
+                        memoryStream = null;
+                        byteBuffer = null;
 
-                    byte[] byteBuffer = Convert.FromBase64String(usuarioTemp.Imagen);
-                    MemoryStream memoryStream = new MemoryStream(byteBuffer);
-                    memoryStream.Position = 0;
-                    bmpReturn = (Bitmap)Bitmap.FromStream(memoryStream);
-                    memoryStream.Close();
-                    memoryStream = null;
-                    byteBuffer = null;
+                        pictureBox1.Image = bmpReturn;
+                    }
 
-                    pictureBox1.Image = bmpReturn;
                     
 
                     textBox5.Text = "Encontrado";
@@ -104,29 +107,6 @@ namespace ProyectoDAMC
                 string base64String = Convert.ToBase64String(imageBytes);
                 return base64String;
             }
-        }
-
-        public static string conversion(System.Drawing.Image image)
-        {
-            using (MemoryStream ms = new MemoryStream())
-
-            {
-
-                // Convert Image to byte[]
-
-                image.Save(ms, ImageFormat.Png);
-
-                byte[] imageBytes = ms.ToArray();
-
-
-                // Convert byte[] to Base64 String
-
-                string base64String = Convert.ToBase64String(imageBytes);
-
-                return base64String;
-
-            }
-
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -181,32 +161,27 @@ namespace ProyectoDAMC
                     var client = new RestClient(url);
                     var request = new RestRequest();
                     request.AddParameter("Tipo", "UpdateUserFromAdmin");
-                    request.AddParameter("Username", textBox6.Text);
+                    request.AddParameter("usuario", textBox6.Text);
                     request.AddParameter("id", userToEdit);
-                    request.AddParameter("Nombre", textBox1.Text);
-                    request.AddParameter("Apellidos", textBox2.Text);
-                    request.AddParameter("Correo", textBox3.Text);
-                    request.AddParameter("Telefono", textBox4.Text);
-                    request.AddParameter("Contrasenha", textBox7.Text);
+                    request.AddParameter("nombre", textBox1.Text);
+                    request.AddParameter("apellidos", textBox2.Text);
+                    request.AddParameter("email", textBox3.Text);
+                    request.AddParameter("phone", textBox4.Text);
+                    request.AddParameter("contrasenha", textBox7.Text);
                     if (checkBox1.Checked == true)
                     {
-                        request.AddParameter("Rol", "1");
+                        request.AddParameter("rol", "1");
                     }
                     else
                     {
-                        request.AddParameter("Rol", "0");
+                        request.AddParameter("rol", "0");
                     }
 
-                    //using (var ms = new MemoryStream())
-                    //{
-                    //    pictureBox1.Image.Save(ms, pictureBox1.Image.RawFormat);
-                    //    byte[] imageBytes = ms.ToArray();
-                    //    string base64String = Convert.ToBase64String(imageBytes);
-                    //    request.AddParameter("Imagen", base64String);
-                    //}
-
-                    string convertedImage = conversion(pictureBox1.Image);
-                    request.AddParameter("Imagen", convertedImage);
+                    Bitmap default_image = new Bitmap(pictureBox1.Image);
+                    ImageConverter converter = new ImageConverter();
+                    byte[] bytes = (byte[])converter.ConvertTo(default_image, typeof(byte[]));
+                    string base64String = Convert.ToBase64String(bytes);
+                    request.AddParameter("bitmap", base64String);
 
                     request.AddHeader("header", "application/json");
                     request.AddHeader("Accept", "application/json");
@@ -214,6 +189,9 @@ namespace ProyectoDAMC
 
                     var response = client.Post(request);
                     var content = response.Content;
+
+                    // Write the bytes (as a Base64 string) to the textbox
+                    string comprimed = base64String;
 
                     if (content != "")
                     {
@@ -235,13 +213,13 @@ namespace ProyectoDAMC
             }
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void pictureBox1_Click(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Filter = "Image Files(*.BMP;*.JPG;*.PNG)|*.BMP;*.JPG;*.PNG)" + "|All files (*.*)|*.*";
             dialog.CheckFileExists = true;
             dialog.Multiselect = false;
-            if (dialog.ShowDialog()==DialogResult.OK)
+            if (dialog.ShowDialog() == DialogResult.OK)
             {
                 Bitmap image = new Bitmap(dialog.FileName);
                 pictureBox1.Image = (Image)image;

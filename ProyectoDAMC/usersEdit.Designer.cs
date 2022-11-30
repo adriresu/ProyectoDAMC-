@@ -48,7 +48,6 @@
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.label8 = new System.Windows.Forms.Label();
             this.textBox7 = new System.Windows.Forms.TextBox();
-            this.button4 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -185,6 +184,7 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 15;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // label7
             // 
@@ -222,22 +222,11 @@
             this.textBox7.Size = new System.Drawing.Size(267, 26);
             this.textBox7.TabIndex = 19;
             // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(1510, 55);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(97, 84);
-            this.button4.TabIndex = 21;
-            this.button4.Text = "Cambiar Imagen";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
             // usersEdit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2207, 875);
-            this.Controls.Add(this.button4);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.textBox7);
             this.Controls.Add(this.checkBox1);
@@ -288,6 +277,5 @@
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox textBox7;
-        private System.Windows.Forms.Button button4;
     }
 }
