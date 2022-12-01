@@ -47,10 +47,10 @@ namespace ProyectoDAMC
             if (flag){            
                 try
                 {
-                    string url = "http://192.168.0.14:80";
+                    string url = "http://192.168.1.136:80";
                     var client = new RestClient(url);
                     var request = new RestRequest();
-                    request.AddParameter("Tipo", "Login");
+                    request.AddParameter("Tipo", "LoginFromAdmin");
                     request.AddParameter("username", textBox1.Text);
                     request.AddParameter("password", textBox2.Text);
                     request.AddHeader("header", "application/json");
@@ -69,8 +69,17 @@ namespace ProyectoDAMC
                         {
                             Registro.user = textBox1.Text;
                             Registro.password = textBox2.Text;
+                            this.Hide();
                             menu.Show();
                         }
+                        else
+                        {
+                            MessageBox.Show("No tiene permisos, hable con un administrador", "ERROR");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Usuario o contraseña invalidos", "ERROR");
                     }
 
                 }
@@ -79,11 +88,16 @@ namespace ProyectoDAMC
                     throw;
                 }
             }
+            else
+            {
+                MessageBox.Show("Rellene los campos correctamente", "ERROR");
+            }
         }
 
         private void label3_Click(object sender, EventArgs e)
         {
             Registro menu = new Registro();
+            this.Visible = false;
             this.Hide();
             menu.Show();
         }

@@ -1,10 +1,12 @@
-﻿using Microsoft.SqlServer.Server;
+﻿using Dapper;
+using Microsoft.SqlServer.Server;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -17,6 +19,7 @@ using System.Windows.Forms;
 using System.Xml.Linq;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using Image = System.Drawing.Image;
 
 namespace ProyectoDAMC
@@ -27,6 +30,32 @@ namespace ProyectoDAMC
         public usersEdit()
         {
             InitializeComponent();
+        }
+
+        const string ConnectionString = "Initial Catalog=DeletedUsers;Data Source=DESKTOP-I18KUTN;Integrated Security=SSPI;";
+        public static BindingList<usuario> listOfUsers;
+        private void usersEdit_Load(object sender, EventArgs e)
+        {
+            listOfUsers = new BindingList<usuario>();
+            listBox1.DataSource = listOfUsers;
+            listBox1.DisplayMember = "Usuario";
+
+            try
+            {
+                using (IDbConnection Conn = new SqlConnection(ConnectionString))
+                {
+                    var Query1 = "SELECT * FROM Usuarios";
+                    var Select1 = Conn.Query<usuario>(Query1).ToList();
+                    for (int i = 0; i < Select1.Count; i++)
+                    {
+                        listOfUsers.Add(Select1[i]);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -47,7 +76,14 @@ namespace ProyectoDAMC
                 if (response.Content != "")
                 {
                     var stringToConvert = response.Content.Substring(1, response.Content.Length - 2);
-                    usuario usuarioTemp = JsonConvert.DeserializeObject<usuario>(stringToConvert);
+
+                    var settings = new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore,
+                        MissingMemberHandling = MissingMemberHandling.Ignore
+                    };
+
+                    usuario usuarioTemp = JsonConvert.DeserializeObject<usuario>(stringToConvert, settings);
                     textBox1.Text = usuarioTemp.Nombre;
                     textBox2.Text = usuarioTemp.Apellidos;
                     textBox3.Text = usuarioTemp.Correo;
@@ -65,7 +101,7 @@ namespace ProyectoDAMC
 
                     Bitmap bmpReturn = null;
 
-                    if (usuarioTemp.Imagen != null)
+                    if (usuarioTemp.Imagen != null && usuarioTemp.Imagen != "")
                     {
                         byte[] byteBuffer = Convert.FromBase64String(usuarioTemp.Imagen);
                         MemoryStream memoryStream = new MemoryStream(byteBuffer);
@@ -77,35 +113,22 @@ namespace ProyectoDAMC
 
                         pictureBox1.Image = bmpReturn;
                     }
+                    else
+                    {
+                        pictureBox1.Image = bmpReturn;
+                    }
 
-                    
-
-                    textBox5.Text = "Encontrado";
                     userToEdit = usuarioTemp.ID;
                 }
                 else
                 {
-                    textBox5.Text = "No encontrado";
+                    MessageBox.Show("Usuario no encontrado", "ERROR");
                     userToEdit = -1;
                 }
             }
             catch (Exception)
             {
                 throw;
-            }
-        }
-
-        public string ImageToBase64(Image image,System.Drawing.Imaging.ImageFormat format)
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                // Convert Image to byte[]
-                image.Save(ms, format);
-                byte[] imageBytes = ms.ToArray();
-
-                // Convert byte[] to Base64 String
-                string base64String = Convert.ToBase64String(imageBytes);
-                return base64String;
             }
         }
 
@@ -157,7 +180,7 @@ namespace ProyectoDAMC
             {
                 try
                 {
-                    string url = "http://192.168.0.14:80";
+                    string url = "http://192.168.1.136:80";
                     var client = new RestClient(url);
                     var request = new RestRequest();
                     request.AddParameter("Tipo", "UpdateUserFromAdmin");
@@ -181,6 +204,7 @@ namespace ProyectoDAMC
                     ImageConverter converter = new ImageConverter();
                     byte[] bytes = (byte[])converter.ConvertTo(default_image, typeof(byte[]));
                     string base64String = Convert.ToBase64String(bytes);
+
                     request.AddParameter("bitmap", base64String);
 
                     request.AddHeader("header", "application/json");
@@ -204,12 +228,17 @@ namespace ProyectoDAMC
                             Registro.password = textBox2.Text;
                         }
                     }
+                    MessageBox.Show("Usuario modificado con exito", "CORRECTO");
 
                 }
                 catch (Exception)
                 {
                     throw;
                 }
+            }
+            else
+            {
+                MessageBox.Show("Rellene los campos correctamente", "ERROR");
             }
         }
 
@@ -226,9 +255,127 @@ namespace ProyectoDAMC
             }
         }
 
-        private void usersEdit_Load(object sender, EventArgs e)
+        private void button3_Click(object sender, EventArgs e)
         {
+            try
+            {
+                string url = "http://192.168.1.136:80";
+                var client = new RestClient(url);
+                var request = new RestRequest();
+                request.AddParameter("Tipo", "RemoveUser");
+                if (userToEdit >= 0)
+                {
+                    request.AddParameter("id", userToEdit);
+                }
+                else
+                {
+                    MessageBox.Show("ID de usuario corrupto", "ERROR");
+                    return;
+                }
+                request.AddHeader("header", "application/json");
+                request.AddHeader("Accept", "application/json");
+                request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+                var response = client.Post(request);
 
+                try
+                {
+                    using (IDbConnection Conn = new SqlConnection(ConnectionString))
+                    {
+                        var Query = $@"INSERT INTO Usuarios (old_ID, Rol, Nombre, Apellidos, Correo, Usuario, Contrasenha, Telefono) VALUES (@old_ID, @Rol, @Nombre, @Apellidos, @Correo, @Usuario, @Contrasenha, @Telefono)";
+
+                        var Insert = Conn.Execute(Query, new { old_ID = label7.Text, Rol = 0, Nombre = textBox1.Text , Apellidos = textBox2.Text, Correo = textBox3.Text, Usuario = textBox6.Text, Telefono = textBox4.Text, Contrasenha = textBox7.Text });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+
+                textBox1.Clear();
+                textBox2.Clear();
+                textBox3.Clear();
+                textBox4.Clear();
+                textBox6.Clear();
+                textBox7.Clear();
+                label7.Text = "";
+                pictureBox1.Image = null;
+
+                listOfUsers.Clear();
+
+                try
+                {
+                    using (IDbConnection Conn = new SqlConnection(ConnectionString))
+                    {
+                        var Query1 = "SELECT * FROM Usuarios";
+                        var Select1 = Conn.Query<usuario>(Query1).ToList();
+                        for (int i = 0; i < Select1.Count; i++)
+                        {
+                            listOfUsers.Add(Select1[i]);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                userToEdit = -1;
+                MessageBox.Show("Usuario eliminado con exito", "CORECTO");
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Error al eliminar usuario", "ERROR");
+                throw;
+            }
         }
+
+        //Recover User
+        private void button4_Click(object sender, EventArgs e)
+        {
+            usuario userToRecover = listBox1.SelectedItem as usuario;
+            String nombre = userToRecover.Nombre;
+
+            try
+            {
+                string url = "http://192.168.1.136:80";
+                var client = new RestClient(url);
+                var request = new RestRequest();
+                request.AddParameter("Tipo", "RestoreUserFromAdmin");
+                request.AddParameter("rol", userToRecover.Rol);
+                request.AddParameter("email", userToRecover.Correo);
+                request.AddParameter("nombre", userToRecover.Nombre);
+                request.AddParameter("apellidos", userToRecover.Apellidos);
+                request.AddParameter("phone", userToRecover.Telefono);
+                request.AddParameter("usuario", userToRecover.Usuario);
+                request.AddParameter("contrasenha", userToRecover.Contrasenha);
+                request.AddHeader("header", "application/json");
+                request.AddHeader("Accept", "application/json");
+                request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+                var response = client.Post(request);
+                var content = response.Content;
+
+                if (content == "")
+                {
+                    listOfUsers.Remove(userToRecover);
+
+                    using (IDbConnection Conn = new SqlConnection(ConnectionString))
+                    {
+                        var Query = $@"DELETE FROM Usuarios WHERE old_ID = @id";
+
+                        var Delete = Conn.Execute(Query, new { id = userToRecover.old_ID });
+
+                    }
+
+                    listOfUsers.Remove(userToRecover);
+                    MessageBox.Show("Usuario recuperado con exito", "CORRECTO");
+                }
+
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
     }
 }

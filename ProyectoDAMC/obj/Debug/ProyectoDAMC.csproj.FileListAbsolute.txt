@@ -76,3 +76,5 @@ D:\Varios\CS\Adri\Escritorio\ProyectoDAMC-\ProyectoDAMC\obj\Debug\ProyectoDAMC.c
 D:\Varios\CS\Adri\Escritorio\ProyectoDAMC-\ProyectoDAMC\obj\Debug\ProyectoDAMC.csproj.CopyComplete
 D:\Varios\CS\Adri\Escritorio\ProyectoDAMC-\ProyectoDAMC\obj\Debug\ProyectoDAMC.exe
 D:\Varios\CS\Adri\Escritorio\ProyectoDAMC-\ProyectoDAMC\obj\Debug\ProyectoDAMC.pdb
+C:\Users\resua\source\repos\ProyectoDAMC\ProyectoDAMC\bin\Debug\Dapper.dll
+C:\Users\resua\source\repos\ProyectoDAMC\ProyectoDAMC\bin\Debug\Dapper.xml
