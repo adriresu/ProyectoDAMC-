@@ -102,6 +102,12 @@
     <Compile Include="Login.Designer.cs">
       <DependentUpon>Login.cs</DependentUpon>
     </Compile>
+    <Compile Include="selection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="selection.Designer.cs">
+      <DependentUpon>selection.cs</DependentUpon>
+    </Compile>
     <Compile Include="Serie.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -116,6 +122,13 @@
     <Compile Include="Registro.Designer.cs">
       <DependentUpon>Registro.cs</DependentUpon>
     </Compile>
+    <Compile Include="serieEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="serieEdit.Designer.cs">
+      <DependentUpon>serieEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="serieItem.cs" />
     <Compile Include="usersEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -132,6 +145,9 @@
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="selection.resx">
+      <DependentUpon>selection.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Serie.resx">
       <DependentUpon>Serie.cs</DependentUpon>
     </EmbeddedResource>
@@ -147,6 +163,9 @@
     </Compile>
     <EmbeddedResource Include="Registro.resx">
       <DependentUpon>Registro.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="serieEdit.resx">
+      <DependentUpon>serieEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="usersEdit.resx">
       <DependentUpon>usersEdit.cs</DependentUpon>

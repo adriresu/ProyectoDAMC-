@@ -32,7 +32,7 @@ namespace ProyectoDAMC
         {
             Boolean flag = true;
             String json;
-            usersEdit menu = new usersEdit();
+            selection menu = new selection();
             if (textBox1.Text.Length <= 0)
             {
                 textBox1.BackColor = Color.FromArgb(255, 191, 191);

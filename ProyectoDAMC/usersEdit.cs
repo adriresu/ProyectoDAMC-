@@ -27,6 +27,7 @@ namespace ProyectoDAMC
     public partial class usersEdit : Form
     {
         public int userToEdit;
+        public string usernameToEdit;
         public usersEdit()
         {
             InitializeComponent();
@@ -36,6 +37,8 @@ namespace ProyectoDAMC
         public static BindingList<usuario> listOfUsers;
         private void usersEdit_Load(object sender, EventArgs e)
         {
+            button3.Enabled = false;
+            button2.Enabled = false;
             listOfUsers = new BindingList<usuario>();
             listBox1.DataSource = listOfUsers;
             listBox1.DisplayMember = "Usuario";
@@ -60,6 +63,11 @@ namespace ProyectoDAMC
 
         private void button1_Click(object sender, EventArgs e)
         {
+            if (textBox6.Text == "")
+            {
+                MessageBox.Show("Porfavor, complete el campo del usuario", "ERROR");
+                return;
+            }
             try
             {
                 string url = "http://192.168.1.136:80";
@@ -119,7 +127,11 @@ namespace ProyectoDAMC
                     }
 
                     userToEdit = usuarioTemp.ID;
-                }
+                    button3.Enabled = true;
+                    button2.Enabled = true;
+
+                    usernameToEdit = textBox6.Text;
+    }
                 else
                 {
                     MessageBox.Show("Usuario no encontrado", "ERROR");
@@ -161,6 +173,11 @@ namespace ProyectoDAMC
                 textBox3.BackColor = Color.FromArgb(255, 191, 191);
                 flag = false;
             }
+            if (!int.TryParse(textBox4.Text, out _))
+            {
+                textBox4.BackColor = Color.FromArgb(255, 191, 191);
+                flag = false;
+            }
 
             //Regex match
             //MatchCollection matches;
@@ -182,6 +199,25 @@ namespace ProyectoDAMC
                 {
                     string url = "http://192.168.1.136:80";
                     var client = new RestClient(url);
+                    var Prerequest = new RestRequest();
+
+                    Prerequest.AddParameter("Tipo", "CheckIfUserFromAdmin");
+                    Prerequest.AddParameter("username", textBox6.Text);
+                    Prerequest.AddParameter("id", label7.Text);
+
+                    Prerequest.AddHeader("header", "application/json");
+                    Prerequest.AddHeader("Accept", "application/json");
+                    Prerequest.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+
+                    var responseUserExists = client.Post(Prerequest);
+                    var contentUserExists = responseUserExists.Content;
+
+                    if (contentUserExists != null && contentUserExists != "")
+                    {
+                        MessageBox.Show("Nombre de usuario ya existente", "ERROR");
+                        return;
+                    }
+
                     var request = new RestRequest();
                     request.AddParameter("Tipo", "UpdateUserFromAdmin");
                     request.AddParameter("usuario", textBox6.Text);
@@ -200,13 +236,19 @@ namespace ProyectoDAMC
                         request.AddParameter("rol", "0");
                     }
 
-                    Bitmap default_image = new Bitmap(pictureBox1.Image);
-                    ImageConverter converter = new ImageConverter();
-                    byte[] bytes = (byte[])converter.ConvertTo(default_image, typeof(byte[]));
-                    string base64String = Convert.ToBase64String(bytes);
-
-                    request.AddParameter("bitmap", base64String);
-
+                    if (pictureBox1.Image != null)
+                    {
+                        Bitmap default_image = new Bitmap(pictureBox1.Image);
+                        ImageConverter converter = new ImageConverter();
+                        byte[] bytes = (byte[])converter.ConvertTo(default_image, typeof(byte[]));
+                        string base64String = Convert.ToBase64String(bytes);
+                        request.AddParameter("bitmap", base64String);
+                    }
+                    else
+                    {
+                        request.AddParameter("bitmap", "");
+                    }
+                    
                     request.AddHeader("header", "application/json");
                     request.AddHeader("Accept", "application/json");
                     request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
@@ -214,21 +256,22 @@ namespace ProyectoDAMC
                     var response = client.Post(request);
                     var content = response.Content;
 
-                    // Write the bytes (as a Base64 string) to the textbox
-                    string comprimed = base64String;
-
-                    if (content != "")
-                    {
-                        var stringToConvert = response.Content.Substring(1, response.Content.Length - 2);
-                        usuario usuarioTemp = JsonConvert.DeserializeObject<usuario>(stringToConvert);
-
-                        if (usuarioTemp.Rol == 1)
-                        {
-                            Registro.user = textBox1.Text;
-                            Registro.password = textBox2.Text;
-                        }
-                    }
                     MessageBox.Show("Usuario modificado con exito", "CORRECTO");
+
+                    //// Write the bytes (as a Base64 string) to the textbox
+                    //string comprimed = base64String;
+                    //if (content != "")
+                    //{
+                    //    var stringToConvert = response.Content.Substring(1, response.Content.Length - 2);
+                    //    usuario usuarioTemp = JsonConvert.DeserializeObject<usuario>(stringToConvert);
+
+                    //    if (usuarioTemp.Rol == 1)
+                    //    {
+                    //        Registro.user = textBox1.Text;
+                    //        Registro.password = textBox2.Text;
+                    //    }
+                    //}
+
 
                 }
                 catch (Exception)
@@ -276,14 +319,13 @@ namespace ProyectoDAMC
                 request.AddHeader("Accept", "application/json");
                 request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
                 var response = client.Post(request);
-
                 try
                 {
                     using (IDbConnection Conn = new SqlConnection(ConnectionString))
                     {
                         var Query = $@"INSERT INTO Usuarios (old_ID, Rol, Nombre, Apellidos, Correo, Usuario, Contrasenha, Telefono) VALUES (@old_ID, @Rol, @Nombre, @Apellidos, @Correo, @Usuario, @Contrasenha, @Telefono)";
 
-                        var Insert = Conn.Execute(Query, new { old_ID = label7.Text, Rol = 0, Nombre = textBox1.Text , Apellidos = textBox2.Text, Correo = textBox3.Text, Usuario = textBox6.Text, Telefono = textBox4.Text, Contrasenha = textBox7.Text });
+                        var Insert = Conn.Execute(Query, new { old_ID = label7.Text, Rol = 0, Nombre = textBox1.Text , Apellidos = textBox2.Text, Correo = textBox3.Text, Usuario = usernameToEdit, Telefono = textBox4.Text, Contrasenha = textBox7.Text });
                     }
                 }
                 catch (Exception ex)
