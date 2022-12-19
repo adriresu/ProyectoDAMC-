@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(serieEdit));
             this.label8 = new System.Windows.Forms.Label();
             this.textBoxSinopsis = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -273,10 +274,10 @@
             this.radioButton4.ForeColor = System.Drawing.Color.White;
             this.radioButton4.Location = new System.Drawing.Point(384, 46);
             this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(111, 33);
+            this.radioButton4.Size = new System.Drawing.Size(101, 33);
             this.radioButton4.TabIndex = 52;
             this.radioButton4.TabStop = true;
-            this.radioButton4.Text = "Anime";
+            this.radioButton4.Text = "Serie";
             this.radioButton4.UseVisualStyleBackColor = false;
             // 
             // radioButton5
@@ -299,10 +300,10 @@
             this.radioButton6.ForeColor = System.Drawing.Color.White;
             this.radioButton6.Location = new System.Drawing.Point(103, 46);
             this.radioButton6.Name = "radioButton6";
-            this.radioButton6.Size = new System.Drawing.Size(101, 33);
+            this.radioButton6.Size = new System.Drawing.Size(111, 33);
             this.radioButton6.TabIndex = 50;
             this.radioButton6.TabStop = true;
-            this.radioButton6.Text = "Serie";
+            this.radioButton6.Text = "Anime";
             this.radioButton6.UseVisualStyleBackColor = false;
             // 
             // groupBox1
@@ -337,12 +338,12 @@
             // 
             // button4
             // 
-            this.button4.Image = global::ProyectoDAMC.Properties.Resources.watchlist_title;
+            this.button4.Image = ((System.Drawing.Image)(resources.GetObject("button4.Image")));
             this.button4.Location = new System.Drawing.Point(1604, 741);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(116, 57);
             this.button4.TabIndex = 55;
-            this.button4.UseVisualStyleBackColor = true;
+            this.button4.UseVisualStyleBackColor = false;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // serieEdit

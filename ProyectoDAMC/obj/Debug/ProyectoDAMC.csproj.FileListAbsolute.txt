@@ -80,3 +80,4 @@ C:\Users\resua\source\repos\ProyectoDAMC\ProyectoDAMC\bin\Debug\Dapper.dll
 C:\Users\resua\source\repos\ProyectoDAMC\ProyectoDAMC\bin\Debug\Dapper.xml
 C:\Users\resua\source\repos\ProyectoDAMC\ProyectoDAMC\obj\Debug\ProyectoDAMC.selection.resources
 C:\Users\resua\source\repos\ProyectoDAMC\ProyectoDAMC\obj\Debug\ProyectoDAMC.serieEdit.resources
+C:\Users\resua\source\repos\ProyectoDAMC\ProyectoDAMC\obj\Debug\ProyectoDAMC.CharacterEdit.resources

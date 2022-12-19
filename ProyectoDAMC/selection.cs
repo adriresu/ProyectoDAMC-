@@ -31,5 +31,12 @@ namespace ProyectoDAMC
             this.Hide();
             menu.Show();
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            CharacterEdit menu = new CharacterEdit();
+            this.Hide();
+            menu.Show();
+        }
     }
 }

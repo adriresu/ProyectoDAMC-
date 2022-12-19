@@ -220,7 +220,7 @@ namespace ProyectoDAMC
                     var request = new RestRequest();
                     request.AddParameter("Tipo", "UpdateSerieFromAdmin");
                     request.AddParameter("titulo", textBoxTitulo.Text);
-                    request.AddParameter("anhoEstreno", dateTimePickerEstreno.Value.ToString());
+                    request.AddParameter("anhoEstreno", (dateTimePickerEstreno.Value.Year).ToString());
                     request.AddParameter("id", serieToEdit);
                     request.AddParameter("genero", checkedListBoxGenero.CheckedItems[0].ToString());
                     request.AddParameter("director", textBoxDirector.Text);
@@ -322,7 +322,7 @@ namespace ProyectoDAMC
                 }
 
                 serieToEdit = -1;
-                MessageBox.Show("Usuario eliminado con exito", "CORECTO");
+                MessageBox.Show("Seie eliminada con exito", "CORECTO");
             }
             catch (Exception)
             {
@@ -360,6 +360,7 @@ namespace ProyectoDAMC
                 textBoxDirector.BackColor = Color.FromArgb(255, 191, 191);
                 flag = false;
             }
+
 
             if (flag)
             {

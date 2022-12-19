@@ -83,6 +83,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Character.cs" />
+    <Compile Include="CharacterEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CharacterEdit.Designer.cs">
+      <DependentUpon>CharacterEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="listaUsuarios.cs" />
     <Compile Include="MainMenu.cs">
       <SubType>Form</SubType>
@@ -136,6 +143,9 @@
       <DependentUpon>usersEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="usuario.cs" />
+    <EmbeddedResource Include="CharacterEdit.resx">
+      <DependentUpon>CharacterEdit.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainMenu.resx">
       <DependentUpon>MainMenu.cs</DependentUpon>
     </EmbeddedResource>

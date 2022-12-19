@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ProyectoDAMC
 {
-    internal class serieItem
+    public class serieItem
     {
         public int ID { get; set; }
         public string Sinopsis { get; set; }
